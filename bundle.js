@@ -42458,6 +42458,8 @@ exports.ExternalLaunchComponent = void 0;
 
 var React = _interopRequireWildcard(__webpack_require__(/*! react */ "../node_modules/react/index.js"));
 
+var _config = __webpack_require__(/*! ./config */ "./config.tsx");
+
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -42509,7 +42511,7 @@ var ExternalLaunchComponent = function ExternalLaunchComponent(props) {
               };
               params = {
                 response_type: 'code',
-                redirect_uri: 'http://74.105.141.196:8080/redirect',
+                redirect_uri: _config.appConfig.RedirectUri,
                 client_id: 'be1aa87b-71b8-41de-ac0d-3ed78c558899',
                 state: Buffer.from(JSON.stringify(state)).toString('base64'),
                 scope: 'launch/patient',
