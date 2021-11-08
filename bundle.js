@@ -42432,7 +42432,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.appConfig = void 0;
 var appConfig = {
-  RedirectUri: "https://quanlicaregility.github.io/epic/#/redirect"
+  RedirectUri: "https://quanlicaregility.github.io/epic/#/redirect" //'http://74.105.141.196:8080/redirect',
+
 };
 exports.appConfig = appConfig;
 
@@ -42628,7 +42629,7 @@ var __awaiter = void 0 && (void 0).__awaiter || function (thisArg, _arguments, P
 var LaunchComponent = function LaunchComponent(props) {
   var onEpicConnect = function onEpicConnect(event) {
     return __awaiter(void 0, void 0, void 0, /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-      var searchParams, _iterator, _step, p, configUrl, response1, smartConfig, state, params;
+      var searchParams, _iterator, _step, p, configUrl, response1, smartConfig, state, params, response2;
 
       return regeneratorRuntime.wrap(function _callee$(_context) {
         while (1) {
@@ -42712,10 +42713,16 @@ var LaunchComponent = function LaunchComponent(props) {
                 state: Buffer.from(JSON.stringify(state)).toString('base64'),
                 aud: searchParams.get('iss') // aud: 'urn:epic:apporchard.curprod'
 
-              };
-              window.location.href = smartConfig.authorization_endpoint + '?' + new URLSearchParams(params);
+              }; // window.location.href = smartConfig.authorization_endpoint + '?' + new URLSearchParams(params);
 
-            case 15:
+              _context.next = 16;
+              return fetch(smartConfig.authorization_endpoint + '?' + new URLSearchParams(params));
+
+            case 16:
+              response2 = _context.sent;
+              console.log(response2.body);
+
+            case 18:
             case "end":
               return _context.stop();
           }
