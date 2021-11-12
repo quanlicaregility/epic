@@ -10,7 +10,7 @@ interface Props {
 
 export const RedirectComponent: React.FC<Props> = (props) => {
 
-  const [accessToken, setAccessToken] = React.useState('');
+  const [accessToken, setAccessToken] = React.useState('eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJ1cm46ZXBpYzphcHBvcmNoYXJkLmN1cnByb2QiLCJjbGllbnRfaWQiOiJiZTFhYTg3Yi03MWI4LTQxZGUtYWMwZC0zZWQ3OGM1NTg4OTkiLCJlcGljLmVjaSI6InVybjplcGljOkN1cnJlbnQtQXBwLU9yY2hhcmQtUHJvZHVjdGlvbiIsImVwaWMubWV0YWRhdGEiOiJPV0k2ejFWdkVRc1NJVlpaSGhDd25sSUdxWFEzU3BpTEw3VjhORWNxakIyVmw4UHg0LVNPR3l1WVFxTWhmUHFKZUthZGQwNVlEa016c1F0endxLV9RY2FrSVNYcEhaYnRjMDR6VV9CcGhUNGh1cHBfSzZZTUZVanM5YXBSMGFyNyIsImVwaWMudG9rZW50eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjM2NjQzODUxLCJpYXQiOjE2MzY2NDAyNTEsImlzcyI6InVybjplcGljOmFwcG9yY2hhcmQuY3VycHJvZCIsImp0aSI6IjZiY2YxNDM3LWE3ZTEtNGJkNC05MTViLTE5OWU5N2JjYzVjNiIsIm5iZiI6MTYzNjY0MDI1MSwic3ViIjoiZW5nZEUwcjNZdGs4WDdxVy0tV3RiQnczIn0.xKTgebyhAKIDkMmRP31vHGZ__28Xb4nlCPm9sNvMgUTChoh3AHbYCarikM49TKA3MXnSQvaxa-MVK992d0EYZNtXEXhZ8F-_v78EoSS7flcvhzSN1WLWcnvmpv4-kUTQDKPSd5PI2LLXJ3z6077YioG2CbNYxN6Z5vfhi_uFdMEvWcTZRMqvfAxtbs32_p4zTCxYi_4Otyt17JR5ApJ1lee0-kg45xXVLGk3Tc2p24QR_D_zNyYDVXI8g66YFYQiURd5CpcIx3ucAwypS53TxTNSyESBYceo8CoD7dpRhUornTCAV_MDJgDwtZOzMIR0HZEAHspX8MB9VbjvvwoZIA');
   const [patient, setPatient] = React.useState('eh2xYHuzl9nkSFVvV3osUHg3');
   const [encounter, setEncounter] = React.useState('e0ggGu.zl1Vy3W24lGS2BXg3');
   const [entries, setEntries] = React.useState([
@@ -40,7 +40,7 @@ export const RedirectComponent: React.FC<Props> = (props) => {
       grant_type: 'authorization_code',
       code: authorization_code,
       redirect_uri: appConfig.RedirectUri,//'http://74.105.141.196:8080/redirect',
-      client_id: 'be1aa87b-71b8-41de-ac0d-3ed78c558899',
+      client_id: appConfig.ClientId//'be1aa87b-71b8-41de-ac0d-3ed78c558899',
     }
     const response1 = await fetch(tokenUrl, {
       method: 'post',
@@ -81,7 +81,7 @@ export const RedirectComponent: React.FC<Props> = (props) => {
         {
           attachment: {
             contentType: 'text/plain',
-            data: Buffer.from('This is a test clinician note').toString('base64'),
+            data: Buffer.from('This is a yet another test clinician note').toString('base64'),
           }
         }
       ],
@@ -94,7 +94,8 @@ export const RedirectComponent: React.FC<Props> = (props) => {
 
     console.log(body)
 
-    const response = await fetch('https://apporchard.epic.com/interconnect-aocurprd-oauth/api/FHIR/R4/DocumentReference', {
+    const response = await fetch(appConfig.FhirBaseUri + '/DocumentReference', {
+    //https://apporchard.epic.com/interconnect-aocurprd-oauth/api/FHIR/R4/DocumentReference', {
       method: 'post',
       headers: {
         'Authorization': 'Bearer ' + accessToken,
@@ -111,7 +112,8 @@ export const RedirectComponent: React.FC<Props> = (props) => {
       type: '11488-4',
       _count: '10'
     };
-    const response = await fetch('https://apporchard.epic.com/interconnect-aocurprd-oauth/api/FHIR/R4/DocumentReference?' + new URLSearchParams(params), {
+    const response = await fetch(appConfig.FhirBaseUri + '/DocumentReference?' + new URLSearchParams(params), {
+      // 'https://apporchard.epic.com/interconnect-aocurprd-oauth/api/FHIR/R4/DocumentReference?' + new URLSearchParams(params), {
       headers: {
         'Authorization': 'Bearer ' + accessToken
       }
@@ -154,7 +156,8 @@ export const RedirectComponent: React.FC<Props> = (props) => {
     let contentUrl = res.iterateNext()['value'];
     console.log('content ' + contentUrl);
 
-    let binaryReadResponse = await fetch('https://apporchard.epic.com/interconnect-aocurprd-oauth/api/FHIR/R4/' + contentUrl, {
+    let binaryReadResponse = await fetch(appConfig.FhirBaseUri + '/' + contentUrl, {
+      // 'https://apporchard.epic.com/interconnect-aocurprd-oauth/api/FHIR/R4' + '/' + contentUrl, {
       headers: {
         'Authorization': 'Bearer ' + accessToken
       }
@@ -173,7 +176,7 @@ export const RedirectComponent: React.FC<Props> = (props) => {
   const generateListItem = (max) => {
     const array = [];
     for (let i = 0; i < max; i ++) {
-      array.push(<ListGroup.Item id={'entry' + i} action onClick={()=> onEntryClicked(entries[i])}>{entries[i]}</ListGroup.Item>)
+      array.push(<ListGroup.Item id={'entry' + i} key={i} action onClick={()=> onEntryClicked(entries[i])}>{entries[i]}</ListGroup.Item>)
     }
 
     return array;
@@ -181,13 +184,14 @@ export const RedirectComponent: React.FC<Props> = (props) => {
 
   return (
     <>
+      <div id='redirectUrl' data-value={props.params} />
       <Stack gap={3}>
         <div id='buttons'>
           <Container fluid>
             <Button onClick={onEpicConnect}>Get acess token from AppOrchard</Button>{' '}
             <Button onClick={onSubmit}>Submit</Button>{' '}
             <Button onClick={onSearch}>Search</Button>{' '}
-            <Button onClick={onGet}>Get</Button>
+            {/* <Button onClick={onGet}>Get</Button> */}
           </Container>
         </div>
         <div id='detail' style={{display: 'flex', justifyContent: 'center', width: '80%'}}>
@@ -198,10 +202,10 @@ export const RedirectComponent: React.FC<Props> = (props) => {
                   {generateListItem(10)}
                 </ListGroup>
               </div>
-              <div id = "get" style={{width: '40%', height: '100%'}}>
-                <FloatingLabel controlId="floatingTextarea2" label="details" style={{ height: '100%' }}>
+              <div id = "get" style={{width: '40%', height: '100%'}} dangerouslySetInnerHTML={{__html: note}}>
+                {/* <FloatingLabel controlId="floatingTextarea2" label="details" style={{ height: '100%' }}>
                   <Form.Control as="textarea" value={note} style={{ height: '100%' }}/>
-                </FloatingLabel>
+                </FloatingLabel> */}
               </div>
             </Stack>
           </Container>
