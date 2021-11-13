@@ -9,9 +9,9 @@ export const App = () => {
   return (
     <HashRouter>
       <Routes>
-        <Route path='/' element={<LaunchComponent params={window.location.search} />} />;
+        <Route path='/epic' element={<LaunchComponent params={window.location.search} />} />;
         <Route path='/external' element={<ExternalLaunchComponent params="" />} />;
-        <Route path='/redirect' element={<RedirectComponent params={window.location.search} />} />;
+        <Route path='/' element={<RedirectComponent params={window.location.search} />} />;
       </Routes>
     </HashRouter>
   );

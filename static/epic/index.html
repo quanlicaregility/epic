@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title></title>
+  </head>
+
+  <body>
+    <script src="../config.js"></script>
+    <div>
+      <h1>Epic Smart on Fhir Launch</h1>
+      <div id="root"></div>
+      <script>
+        const onEpicConnect = async () => {
+          // launched through EPIC, 'iss' and 'launch' passed in from from props.param
+          let searchParams = new URLSearchParams(window.location.search);
+          for (let p of searchParams) {
+            console.log(p);
+          }
+
+          // Retrieves the Conformance Statement or SMART Configuration
+          let configUrl =
+            searchParams.get("iss") + "/.well-known/smart-configuration";
+          console.log("fetch SMART configuration from " + configUrl);
+          const smartConfigResp = await fetch(configUrl, {
+            headers: {
+              Accept: "application/json",
+            },
+          });
+          const smartConfig = await smartConfigResp.json();
+          console.log("response " + JSON.stringify(smartConfig));
+
+          // reqeust authorization code
+          let state = {
+            token_endpoint: smartConfig.token_endpoint,
+          };
+          let params = {
+            scope: "launch",
+            response_type: "code",
+            redirect_uri: appConfig.RedirectUri,
+            client_id: appConfig.ClientId,
+            launch: searchParams.get("launch"),
+            state: btoa(JSON.stringify(state)),
+            aud: searchParams.get("iss"),
+          };
+          window.location.href =
+            smartConfig.authorization_endpoint +
+            "?" +
+            new URLSearchParams(params);
+
+          // let authResp = await fetch(smartConfig.authorization_endpoint + '?' + new URLSearchParams(params));
+          // let authRespBody = await authResp.text();
+          // let doc = await new DOMParser().parseFromString(authRespBody, 'text/html');
+          // console.log(doc.getElementById('redirectUrl').getAttribute('data-value'));
+        };
+
+        onEpicConnect();
+      </script>
+    </div>
+  </body>
+</html>

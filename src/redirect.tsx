@@ -2,8 +2,6 @@ import * as React from "react";
 import { ListGroup } from "react-bootstrap";
 import { Button, Container, FloatingLabel, Form, Stack } from "react-bootstrap";
 
-import { appConfig } from "./config"
-
 interface Props {
   params: string;
 }
@@ -39,8 +37,8 @@ export const RedirectComponent: React.FC<Props> = (props) => {
     let params = {
       grant_type: 'authorization_code',
       code: authorization_code,
-      redirect_uri: appConfig.RedirectUri,//'http://74.105.141.196:8080/redirect',
-      client_id: appConfig.ClientId//'be1aa87b-71b8-41de-ac0d-3ed78c558899',
+      redirect_uri: appConfig.RedirectUri,
+      client_id: appConfig.ClientId
     }
     const response1 = await fetch(tokenUrl, {
       method: 'post',
